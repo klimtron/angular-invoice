@@ -1,5 +1,5 @@
 .container {
-  margin: 100px auto;
+  margin: 30px auto;
   width: 94%;
 }
 
@@ -12,10 +12,47 @@
   padding: 4px 10px;
   border-bottom: 2px solid green;
   border-left: 2px solid green;
+  border-right: 2px solid green;
 }
 
 .rowError {
   padding: 4px 10px;
   border-bottom: 2px solid lightgrey;
   border-left: 2px solid lightgrey;
+  border-right: 2px solid lightgrey;
+}
+
+.gridContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: [col] 20% [col] 15% [col] 15% [col] 15% [col] 5%;
+  grid-column-gap: 2px;
+  justify-content: space-between;
+  align-items: center;
+  &.twoCols {
+    grid-template-columns: [col] 48% [col] 48%;
+  }
+
+  // Na małych ekranach, zmieniamy układ na 2 kolumny
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  // Na bardzo małych ekranach, zmieniamy układ na 1 kolumnę
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.total {
+  margin: 10px 0;
+  font-weight: 800;
+}
+
+.button {
+  margin: 20px 0;
+}
+
+.text-align-right {
+  text-align: right;
 }

@@ -2,51 +2,48 @@
   <h2>Faktura Kontraktowca</h2>
   <mat-card>
     <div [formGroup]="invoiceForm">
-      <mat-form-field>
-        <mat-label>NIP</mat-label>
-        <input matInput formControlName="nipNumber" />
-        <mat-error
-          *ngIf="
-            this.invoiceForm.get('nipNumber')?.value &&
-            !this.invoiceForm.get('nipNumber')?.valid
-          "
-        >
-          Nip nie jest poprawny
-        </mat-error>
-        <mat-error
-          *ngIf="this.invoiceForm.get('nipNumber')?.errors?.['required']"
-        >
-          Pole NIP wymagane
-        </mat-error>
-      </mat-form-field>
-      &nbsp;
-
-      <mat-form-field
-        ><mat-select
-          placeholder="Waluta"
-          formControlName="currency"
-          name="currency"
-          required
-        >
-          <mat-option
-            *ngFor="let options of CurrencySymbolEnumKeys"
-            [value]="options"
-            >{{ options }}</mat-option
-          >
-        </mat-select>
-        <mat-error
-          *ngIf="this.invoiceForm.get('currency')?.errors?.['required']"
-        >
-          Pole Waluta wymagane
-        </mat-error>
-        <!-- <div
-          *ngIf="control.invalid && (control.dirty || control.touched)"
-          class="error"
-        >
-          {{ control.errors | validator : customValidatorMessages }}
-        </div> -->
-      </mat-form-field>
-
+      <div class="gridContainer twoCols">
+        <div class="gridItem">
+          <mat-form-field class="fullwidth">
+            <mat-label>NIP</mat-label>
+            <input matInput formControlName="nipNumber" />
+            <mat-error
+              *ngIf="
+                this.invoiceForm.get('nipNumber')?.value &&
+                !this.invoiceForm.get('nipNumber')?.valid
+              "
+            >
+              Nip nie jest poprawny
+            </mat-error>
+            <mat-error
+              *ngIf="this.invoiceForm.get('nipNumber')?.errors?.['required']"
+            >
+              Pole NIP wymagane
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="gridItem">
+          <mat-form-field class="fullwidth"
+            ><mat-select
+              placeholder="Waluta"
+              formControlName="currency"
+              name="currency"
+              required
+            >
+              <mat-option
+                *ngFor="let options of CurrencySymbolEnumKeys"
+                [value]="options"
+                >{{ options }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="this.invoiceForm.get('currency')?.errors?.['required']"
+            >
+              Pole Waluta wymagane
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
       <div formArrayName="amountRows">
         <div *ngFor="let row of invoiceAmountRows.controls; let i = index">
           <div
@@ -58,84 +55,102 @@
                 : 'rowError'
             "
           >
-            <mat-form-field appearance="outline">
-              <mat-select
-                placeholder="Stawka VAT"
-                formControlName="vatRate"
-                required
-                (selectionChange)="onRowChanges(RowFieldTypes.VAT_RATE, row)"
-              >
-                <mat-option
-                  *ngFor="let options of VAT_RATES"
-                  [value]="options.value"
-                  >{{ options.displayName }}</mat-option
+            <div class="gridContainer">
+              <div class="gridItem">
+                <mat-form-field appearance="outline">
+                  <mat-select
+                    placeholder="Stawka VAT"
+                    formControlName="vatRate"
+                    required
+                    (selectionChange)="
+                      onRowChanges(RowFieldTypes.VAT_RATE, row)
+                    "
+                  >
+                    <mat-option
+                      *ngFor="let options of VAT_RATES"
+                      [value]="options.value"
+                      >{{ options.displayName }}</mat-option
+                    >
+                  </mat-select>
+                  <mat-error *ngIf="row.get('vatRate')?.errors?.['required']">
+                    Pole Waluta wymagane
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="gridItem">
+                <mat-form-field>
+                  <mat-label>Kwota netto</mat-label>
+                  <input
+                    class="text-align-right"
+                    name="netAmount{i}"
+                    matInput
+                    formControlName="netAmount"
+                    (input)="onRowChanges(RowFieldTypes.NET_AMOUNT, row)"
+                    pattern="[0-9]+"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="gridItem">
+                <mat-form-field>
+                  <mat-label>Kwota VAT</mat-label>
+                  <input
+                    class="text-align-right"
+                    matInput
+                    formControlName="vatAmount"
+                    (input)="onRowChanges(RowFieldTypes.VAT_AMOUNT, row)"
+                  />
+                  <mat-error *ngIf="row.get('vatAmount')?.errors?.['required']">
+                    Pole Kwota Vat wymagane
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="gridItem">
+                <mat-form-field>
+                  <mat-label>Kwota Brutto</mat-label>
+                  <input
+                    class="text-align-right"
+                    matInput
+                    formControlName="grossAmount"
+                    (input)="onRowChanges(RowFieldTypes.GROSS_AMOUNT, row)"
+                  />
+                  <mat-error
+                    *ngIf="row.get('grossAmount')?.errors?.['required']"
+                  >
+                    Pole Kwota Brutto wymagane
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="gridItem">
+                <button
+                  class="delete-btn"
+                  (click)="deleteInvoiceRow(i)"
+                  mat-button
                 >
-              </mat-select>
-              <mat-error *ngIf="row.get('vatRate')?.errors?.['required']">
-                Pole Waluta wymagane
-              </mat-error>
-            </mat-form-field>
-            &nbsp;
-            <mat-form-field>
-              <mat-label>Kwota netto</mat-label>
-              <input
-                name="netAmount{i}"
-                matInput
-                formControlName="netAmount"
-                (input)="onRowChanges(RowFieldTypes.NET_AMOUNT, row)"
-                pattern="[0-9]+"
-              />
-            </mat-form-field>
-            <!--[value]="row.get('netAmount')?.value | number : '1.2-2'" -->
-            <!-- | currency : invoiceForm.get('currency')?.value : '' -->
-            &nbsp;
-            <mat-form-field>
-              <mat-label>Kwota VAT</mat-label>
-              <input
-                matInput
-                formControlName="vatAmount"
-                (input)="onRowChanges(RowFieldTypes.VAT_AMOUNT, row)"
-              />
-              <mat-error *ngIf="row.get('vatAmount')?.errors?.['required']">
-                Pole Kwota Vat wymagane
-              </mat-error>
-            </mat-form-field>
-            &nbsp;
-            <mat-form-field>
-              <mat-label>Kwota Brutto</mat-label>
-              <input
-                matInput
-                formControlName="grossAmount"
-                (input)="onRowChanges(RowFieldTypes.GROSS_AMOUNT, row)"
-              />
-              <mat-error *ngIf="row.get('grossAmount')?.errors?.['required']">
-                Pole Kwota Brutto wymagane
-              </mat-error>
-            </mat-form-field>
-            &nbsp;
-
-            <button (click)="deleteInvoiceRow(i)" mat-button>
-              <mat-icon>close</mat-icon>
-            </button>
-
-            <span *ngIf="validateRowAmounts(row)"
-              ><mat-icon style="color: green">check</mat-icon>
-            </span>
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <span *ngIf="validateRowAmounts(row)"
+                ><mat-icon style="color: green">check</mat-icon>
+              </span>
+            </div>
           </div>
         </div>
-        <br />
-        <span>Razem:</span>&nbsp;&nbsp; <span>{{ netAmountSum }}</span
-        >&nbsp;&nbsp; <span>{{ vatAmountSum }}</span
-        >&nbsp;&nbsp;
-        <span>{{ grossAmountSum }}</span>
-        <br />
-        <span>Razem do zapłaty:</span>
-        <span></span>
+        <button class="button" (click)="addInvoiceRow()" mat-raised-button>
+          Dodaj wiersz
+        </button>
+        <div class="gridContainer">
+          <span class="gridItem">Razem:</span>
+          <span class="gridItem text-align-right">{{ netAmountSum }}</span>
+          <span class="gridItem text-align-right">{{ vatAmountSum }}</span>
+          <span class="gridItem text-align-right">{{ grossAmountSum }}</span>
+        </div>
+        <div class="gridContainer total">
+          <span class="gridItem">Razem do zapłaty:</span>
+          <span class="gridItem"></span>
+          <span class="gridItem"></span>
+          <span class="text-align-right">{{ grossAmountSum }}</span>
+        </div>
       </div>
-      <button (click)="addInvoiceRow()" mat-raised-button>Dodaj wiersz</button>
-      <br />
-      <br />
-      <br />
 
       <mat-form-field class="full-width">
         <mat-label>Data wystawienia</mat-label>
