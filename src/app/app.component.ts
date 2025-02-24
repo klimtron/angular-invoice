@@ -273,6 +273,19 @@ export class AppComponent implements OnInit {
     return false;
   }
 
+  loadState() {
+    const FORM_VALUE: string = JSON.parse(
+      localStorage.getItem('form-data') || '{}'
+    );
+    if (FORM_VALUE) {
+      this.invoiceForm.patchValue(JSON.parse(JSON.stringify(FORM_VALUE)));
+      this.invoiceAmountRows.controls.forEach((row, i) => {
+        if (row.valid) this.enableRowAmounts(row);
+      });
+      this.calculateSummaryAmount();
+    }
+  }
+
   resetForm() {
     this.invoiceForm.reset(this.invoiceForm);
     this.invoiceForm.markAsPristine();

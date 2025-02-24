@@ -299,7 +299,16 @@
         >
           Wyczyść
         </button>
-
+        <button
+          mat-raised-button
+          type="button"
+          label="załaduj zapisany stan"
+          aria-label="załaduj zapisany stan"
+          (click)="loadState()"
+          [disabled]="validateTotalGrossAmount()"
+        >
+          Załaduj zapisany stan
+        </button>
         <button
           type="button"
           aria-label="Zapisz formularz"
