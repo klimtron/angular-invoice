@@ -111,7 +111,7 @@
                   >
                     Netto wymagane
                   </mat-error>
-                  <mat-error *ngIf="row.get('netAmount')?.status === 'INVALID'">
+                  <mat-error *ngIf="row.get('netAmount')?.hasError('pattern')">
                     Wpisz poprawną wartość
                   </mat-error>
                 </mat-form-field>
@@ -126,10 +126,12 @@
                     (input)="onRowChanges(RowFieldTypes.VAT_AMOUNT, row)"
                     aria-label="Kwota VAT"
                   />
-                  <mat-error *ngIf="row.get('vatAmount')?.errors?.['required']">
+                  <mat-error
+                    *ngIf="row.get('vatAmount')?.errors?.['required'] && (row.get('vatAmount')?.dirty || row.get('netAmount')?.touched)"
+                  >
                     Vat wymagane
                   </mat-error>
-                  <mat-error *ngIf="row.get('vatAmount')?.status === 'INVALID'">
+                  <mat-error *ngIf="row.get('vatAmount')?.hasError('pattern')">
                     Wpisz poprawną wartość
                   </mat-error>
                 </mat-form-field>
@@ -145,12 +147,12 @@
                     aria-label="Kwota Brutto"
                   />
                   <mat-error
-                    *ngIf="row.get('grossAmount')?.errors?.['required']"
+                    *ngIf="row.get('grossAmount')?.errors?.['required'] && (row.get('grossAmount')?.dirty || row.get('grossAmount')?.touched)"
                   >
                     Brutto wymagane
                   </mat-error>
                   <mat-error
-                    *ngIf="row.get('grossAmount')?.status === 'INVALID'"
+                    *ngIf="row.get('grossAmount')?.hasError('pattern')"
                   >
                     Wpisz poprawną wartość
                   </mat-error>
@@ -189,13 +191,13 @@
           <div class="grid-container">
             <span class="grid-item">Razem:</span>
             <span class="grid-item text-align-right" aria-label="Suma netto">{{
-              netAmountSum
+              netAmountSum | number : "1.2-2"
             }}</span>
             <span class="grid-item text-align-right" aria-label="Suma VAT">{{
-              vatAmountSum
+              vatAmountSum | number : "1.2-2"
             }}</span>
             <span class="grid-item text-align-right" aria-label="Suma brutto">{{
-              grossAmountSum
+              grossAmountSum | number : "1.2-2"
             }}</span>
           </div>
           <div class="grid-container total">
@@ -282,16 +284,6 @@
       </mat-form-field>
 
       <div>
-        <button
-          mat-raised-button
-          type="button"
-          label="załaduj zapisany stan"
-          aria-label="załaduj zapisany stan"
-          (click)="loadState()"
-          [disabled]="validateTotalGrossAmount()"
-        >
-          Załaduj zapisany stan
-        </button>
         <button
           type="button"
           aria-label="Wyczyść Formularz"

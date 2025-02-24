@@ -26,15 +26,13 @@ export class AppComponent implements OnInit {
   constructor(liveAnnouncer: LiveAnnouncer) {
     liveAnnouncer.announce('Witaj w aplikacji do wypełniania faktur'); //WCAG LiveAnnouncer is used to announce messages for screen-reader users using an aria-live region.
   }
-  formId: string = '';
   netAmountSum: number = 0;
   vatAmountSum: number = 0;
   grossAmountSum: number = 0;
-  VAT_RATES = VAT_RATES;
   RowFieldTypes = RowFieldTypes;
   CurrencySymbolEnum = CurrencySymbolEnum;
   CurrencySymbolEnumKeys: string[] = [];
-  customValidatorMessages: { [key: string]: string } = {};
+  VAT_RATES = VAT_RATES;
 
   invoiceForm: FormGroup = new FormGroup({
     id: new FormControl<string | null>(''),
@@ -84,19 +82,6 @@ export class AppComponent implements OnInit {
     document.documentElement.setAttribute('theme', 'light');
     this.invoiceForm.get('id')?.patchValue(new Date().getTime().toString());
     this.CurrencySymbolEnumKeys = Object.keys(this.CurrencySymbolEnum);
-  }
-
-  loadState() {
-    const FORM_VALUE: string = JSON.parse(
-      localStorage.getItem('form-data') || '{}'
-    );
-
-    if (FORM_VALUE) {
-      this.invoiceForm.patchValue(JSON.parse(JSON.stringify(FORM_VALUE)));
-      this.invoiceAmountRows.controls.forEach((row, i) => {
-        if (row.valid) this.enableRowAmounts(row);
-      });
-    }
   }
 
   get lightTheme(): boolean {
