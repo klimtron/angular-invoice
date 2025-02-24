@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormArray,
@@ -11,8 +11,10 @@ import {
   CurrencySymbolEnum,
   RowFieldTypes,
   NIP_EXAMPLE,
+  MATCH_NON_DIGITS,
+  MATCH_DIGITS_AND_DECIMAL,
 } from './shared/models';
-import { decimalValidator, nipNumberValidator } from './shared/validators';
+import { nipNumberValidator } from './shared/validators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
@@ -52,15 +54,15 @@ export class AppComponent implements OnInit {
         ),
         netAmount: new FormControl<string | null>(
           { value: null, disabled: true },
-          [Validators.required, decimalValidator()]
+          [Validators.required, Validators.pattern(MATCH_DIGITS_AND_DECIMAL)]
         ),
         vatAmount: new FormControl<string | null>(
           { value: null, disabled: true },
-          [Validators.required, decimalValidator()]
+          [Validators.required, Validators.pattern(MATCH_DIGITS_AND_DECIMAL)]
         ),
         grossAmount: new FormControl<string | null>(
           { value: null, disabled: true },
-          [Validators.required, decimalValidator()]
+          [Validators.required, Validators.pattern(MATCH_DIGITS_AND_DECIMAL)]
         ),
       }),
     ]),
@@ -82,12 +84,6 @@ export class AppComponent implements OnInit {
     document.documentElement.setAttribute('theme', 'light');
     this.invoiceForm.get('id')?.patchValue(new Date().getTime().toString());
     this.CurrencySymbolEnumKeys = Object.keys(this.CurrencySymbolEnum);
-
-    this.invoiceAmountRows.controls.forEach((row) => {
-      row.get('netAmount')?.addValidators(decimalValidator());
-      row.get('vatAmount')?.addValidators(decimalValidator());
-      row.get('grossAmount')?.addValidators(decimalValidator());
-    });
   }
 
   loadState() {

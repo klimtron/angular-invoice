@@ -180,7 +180,6 @@
           type="button"
           class="button"
           (click)="addInvoiceRow()"
-          [disabled]="this.invoiceForm.get('amountRows')?.status === 'INVALID'"
           mat-raised-button
           aria-label="Dodaj wiersz formularza"
         >
@@ -315,7 +314,7 @@
           type="submit"
           aria-label="Zapisz i wyślij formularz do zatwierdzenia"
           [disabled]="
-            validateTotalGrossAmount() || this.invoiceForm?.status === 'INVALID'
+            validateTotalGrossAmount() || this.invoiceForm.status === 'INVALID'
           "
           mat-raised-button
         >

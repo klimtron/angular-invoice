@@ -1,5 +1,4 @@
 ﻿import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { MATCH_NON_DIGITS_AND_DOTS } from './models';
 
 export function nipNumberValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -8,22 +7,6 @@ export function nipNumberValidator(): ValidatorFn {
     return NipNumberError ? { NipNumber: true } : null;
   };
 }
-
-export function decimalValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    control.value?.replace(MATCH_NON_DIGITS_AND_DOTS, '');
-    const decimalValidatorError = control.value && !isValidNip(control.value);
-    return decimalValidatorError ? { DecimalValue: true } : null;
-  };
-}
-
-// export function rowAmountsValidator(): ValidatorFn {
-//   return (control: AbstractControl): ValidationErrors | null => {
-//     control.value?.replace(/[\ \-]/gi, '');
-//     const NipNumberError = control.value && !isValidNip(control.value);
-//     return NipNumberError ? { NipNumber: true } : null;
-//   };
-// }
 
 function isValidNip(nip: string) {
   if (typeof nip !== 'string') return false;
