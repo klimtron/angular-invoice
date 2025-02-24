@@ -1,12 +1,14 @@
 <div class="container">
-  <div>
-    Dark Mode
-    <mat-slide-toggle
-      color="primary"
-      [checked]="lightTheme"
-      (change)="toggleTheme()"
-    ></mat-slide-toggle>
-    Light Mode
+  <div class="d-flex">
+    <div class="flex-right">
+      Tryb Ciemny
+      <mat-slide-toggle
+        color="primary"
+        [checked]="lightTheme"
+        (change)="toggleTheme()"
+      ></mat-slide-toggle>
+      Tryb Jasny
+    </div>
   </div>
   <h2>Faktura Kontraktowca</h2>
   <mat-card>

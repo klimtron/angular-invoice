@@ -80,6 +80,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.invoiceForm.get('id')?.patchValue(new Date().getTime().toString());
     this.CurrencySymbolEnumKeys = Object.keys(this.CurrencySymbolEnum);
+    document.documentElement.setAttribute('theme', 'light');
   }
 
   get lightTheme(): boolean {
