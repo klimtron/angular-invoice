@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormArray,
@@ -6,12 +6,7 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import {
-  VAT_RATES,
-  CurrencySymbolEnum,
-  RowFieldTypes,
-  DIGIT_REGEX,
-} from './shared/models';
+import { VAT_RATES, CurrencySymbolEnum, RowFieldTypes } from './shared/models';
 import { nipNumberValidator } from './shared/validators';
 
 @Component({
@@ -20,6 +15,7 @@ import { nipNumberValidator } from './shared/validators';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  formId: string = '';
   netAmountSum: number = 0;
   vatAmountSum: number = 0;
   grossAmountSum: number = 0;
@@ -27,15 +23,10 @@ export class AppComponent implements OnInit {
   RowFieldTypes = RowFieldTypes;
   CurrencySymbolEnum = CurrencySymbolEnum;
   CurrencySymbolEnumKeys: string[] = [];
-  DIGIT_REGEX = DIGIT_REGEX;
   customValidatorMessages: { [key: string]: string } = {};
 
   invoiceForm: FormGroup = new FormGroup({
-    // nip: new FormControl(
-    //   { value: '', disabled: false },
-    //   Validators.required,
-    //   nipNumberValidator()
-    // ),
+    id: new FormControl(this.formId),
     nipNumber: new FormControl<number | null>(null, [
       Validators.required,
       nipNumberValidator(),
@@ -79,12 +70,9 @@ export class AppComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.formId = new Date().getTime().toString();
     this.CurrencySymbolEnumKeys = Object.keys(this.CurrencySymbolEnum);
   }
-
-  // get nip() {
-  //   return this.invoiceForm.get('nip');
-  // }
 
   addInvoiceRow() {
     const newInvoiceRow = new FormGroup({
@@ -138,10 +126,13 @@ export class AppComponent implements OnInit {
     this.grossAmountSum = this.invoiceAmountRows.controls
       .map((item) => item.get('grossAmount')?.value)
       .reduce((acc, item) => acc + Number(item), 0);
+
+    // console.log('invoiceForm', this.invoiceForm.get('amountRows')?.value);
   }
 
   updateVatRateOrNetAmount(row: AbstractControl) {
-    const NET_AMOUNT_VALUE: number = parseInt(row.get('netAmount')?.value);
+    const NET_AMOUNT_VALUE: number = parseFloat(row.get('netAmount')?.value);
+    console.log('NET_AMOUNT_VALUE', NET_AMOUNT_VALUE);
     const UPDATED_VAT_AMOUNT: number = parseFloat(
       (row.get('vatRate')?.value * NET_AMOUNT_VALUE).toFixed(2)
     );
