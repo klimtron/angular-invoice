@@ -290,6 +290,7 @@ export class AppComponent implements OnInit {
     this.invoiceForm.reset(this.invoiceForm);
     this.invoiceForm.markAsPristine();
     this.invoiceForm.markAsUntouched();
+    this.calculateSummaryAmount();
   }
 
   saveForm() {
