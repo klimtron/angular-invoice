@@ -132,7 +132,6 @@ export class AppComponent implements OnInit {
 
   updateVatRateOrNetAmount(row: AbstractControl) {
     const NET_AMOUNT_VALUE: number = parseFloat(row.get('netAmount')?.value);
-    console.log('NET_AMOUNT_VALUE', NET_AMOUNT_VALUE);
     const UPDATED_VAT_AMOUNT: number = parseFloat(
       (row.get('vatRate')?.value * NET_AMOUNT_VALUE).toFixed(2)
     );

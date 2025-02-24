@@ -202,13 +202,9 @@
         <input
           matInput
           [matDatepicker]="invoiceDeliverDatePicker"
-          placeholder="Data Wystawienia"
+          placeholder="Data dostarczenia"
           formControlName="invoiceDeliverDate"
           required
-          [value]="
-            this.invoiceForm.get('invoiceDeliverDatePicker')?.value
-              | date : 'yyyy.MM.dd'
-          "
         />
         <mat-datepicker-toggle
           matSuffix
