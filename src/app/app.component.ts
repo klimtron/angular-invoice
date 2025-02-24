@@ -26,13 +26,13 @@ export class AppComponent implements OnInit {
   customValidatorMessages: { [key: string]: string } = {};
 
   invoiceForm: FormGroup = new FormGroup({
-    id: new FormControl(this.formId),
-    nipNumber: new FormControl<number | null>(null, [
+    id: new FormControl<string | null>(''),
+    nipNumber: new FormControl<string | null>('1181784140', [
       Validators.required,
       nipNumberValidator(),
     ]),
     currency: new FormControl(
-      { value: '', disabled: false },
+      { value: CurrencySymbolEnum.PLN, disabled: false },
       Validators.required
     ),
     amountRows: new FormArray([
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.formId = new Date().getTime().toString();
+    this.invoiceForm.get('id')?.patchValue(new Date().getTime().toString());
     this.CurrencySymbolEnumKeys = Object.keys(this.CurrencySymbolEnum);
   }
 
@@ -141,6 +141,7 @@ export class AppComponent implements OnInit {
     );
 
     if (NET_AMOUNT_VALUE) {
+      row.get('netAmount')?.patchValue(NET_AMOUNT_VALUE);
       row.get('vatAmount')?.patchValue(UPDATED_VAT_AMOUNT);
       row.get('grossAmount')?.patchValue(UPDATED_GROSS_AMOUNT);
     } else {
@@ -218,20 +219,25 @@ export class AppComponent implements OnInit {
     return parseFloat((netAmount * (1 + vatRate)).toFixed(2));
   }
 
-  deleteForm() {}
+  validateTotalGrossAmount(): boolean {
+    if (
+      (this.grossAmountSum > 4000 &&
+        this.invoiceForm.get('currency')?.value === CurrencySymbolEnum.PLN) ||
+      (this.grossAmountSum > 1000 &&
+        this.invoiceForm.get('currency')?.value === CurrencySymbolEnum.USD) ||
+      (this.grossAmountSum > 1000 &&
+        this.invoiceForm.get('currency')?.value === CurrencySymbolEnum.EUR)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  deleteForm() {
+    this.invoiceForm.markAsPristine();
+    this.invoiceForm.markAsUntouched();
+    // this.invoiceForm.reset(this.invoiceForm.value);
+  }
 
   saveForm() {}
-
-  // public checkError = (controlName: string, errorName: string) => {
-  //   return this.invoiceForm.controls[controlName].hasError(errorName);
-  // };
-
-  // getNipError() {
-  //   if (this.email.hasError('email')) {
-  //     return 'Please enter a valid email address.';
-  //   }
-  //   if (this.email.hasError('required')) {
-  //     return 'An Email is required.';
-  //   }
-  // }
 }

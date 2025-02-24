@@ -149,7 +149,7 @@
         <button
           class="button"
           (click)="addInvoiceRow()"
-          [disabled]="this.invoiceForm.get('amountRows')?.status !== 'INVALID'"
+          [disabled]="this.invoiceForm.get('amountRows')?.status === 'INVALID'"
           mat-raised-button
           aria-label="Dodaj wiersz formularza"
         >
@@ -168,6 +168,9 @@
             <span class="gridItem"></span>
             <span class="text-align-right">{{ grossAmountSum }}</span>
           </div>
+          <mat-error *ngIf="validateTotalGrossAmount()">
+            Łączna kwota pozycji brutto została przekroczona
+          </mat-error>
         </div>
       </div>
 
@@ -202,6 +205,10 @@
           placeholder="Data Wystawienia"
           formControlName="invoiceDeliverDate"
           required
+          [value]="
+            this.invoiceForm.get('invoiceDeliverDatePicker')?.value
+              | date : 'yyyy.MM.dd'
+          "
         />
         <mat-datepicker-toggle
           matSuffix
@@ -237,35 +244,35 @@
         </mat-error>
       </mat-form-field>
 
-      <br />
-      <br />
+      <div>
+        <button
+          type="button"
+          aria-label="Usuń Formularz"
+          (click)="deleteForm()"
+          mat-raised-button
+        >
+          Usuń
+        </button>
 
-      <button
-        type="button"
-        aria-label="Usuń Formularz"
-        (click)="deleteForm()"
-        mat-raised-button
-      >
-        Usuń
-      </button>
-      <button
-        type="button"
-        aria-label="Zapisz formularz"
-        (click)="saveForm()"
-        mat-raised-button
-      >
-        Zapisz
-      </button>
-      <button
-        type="button"
-        aria-label="Zapisz i wyślij formularz do zatwierdzenia"
-        disabled
-        mat-raised-button
-      >
-        Zapisz i wyślij do zatwierdzenia
-      </button>
+        <button
+          type="button"
+          aria-label="Zapisz formularz"
+          (click)="saveForm()"
+          mat-raised-button
+          [disabled]="validateTotalGrossAmount()"
+        >
+          Zapisz
+        </button>
+        <button
+          type="button"
+          aria-label="Zapisz i wyślij formularz do zatwierdzenia"
+          disabled
+          mat-raised-button
+        >
+          Zapisz i wyślij do zatwierdzenia
+        </button>
+      </div>
     </div>
-
     <pre>{{ invoiceForm.value | json }}</pre>
   </mat-card>
 </div>

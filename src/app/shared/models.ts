@@ -47,18 +47,6 @@ export const VAT_RATES: Option[] = [
   },
 ];
 
-export const DATE_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY',
-  },
-};
-
 export const MATCH_NON_DIGITS_AND_DOTS = /[^.0-9]+/g;
 export const MATCH_SPACES = /\s/g;
 export const MATCH_DIGITS = /[0-9]/g;
