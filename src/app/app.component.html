@@ -1,4 +1,13 @@
 <div class="container">
+  <div>
+    Dark Mode
+    <mat-slide-toggle
+      color="primary"
+      [checked]="lightTheme"
+      (change)="toggleTheme()"
+    ></mat-slide-toggle>
+    Light Mode
+  </div>
   <h2>Faktura Kontraktowca</h2>
   <mat-card>
     <div [formGroup]="invoiceForm">

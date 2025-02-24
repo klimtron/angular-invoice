@@ -74,6 +74,17 @@ export class AppComponent implements OnInit {
     this.CurrencySymbolEnumKeys = Object.keys(this.CurrencySymbolEnum);
   }
 
+  get lightTheme(): boolean {
+    return document.documentElement.getAttribute('theme') === 'light';
+  }
+  
+  toggleTheme() {
+    if (this.lightTheme) {
+      document.documentElement.setAttribute('theme', null!);
+    } else {
+      document.documentElement.setAttribute('theme', 'light');
+    }
+  }
   addInvoiceRow() {
     const newInvoiceRow = new FormGroup({
       vatRate: new FormControl(
