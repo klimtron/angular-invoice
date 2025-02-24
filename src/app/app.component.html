@@ -143,7 +143,7 @@
                   type="button"
                   class="delete-btn"
                   aria-label="Usuń wiersz formularza"
-                  (click)="deleteInvoiceRow(i)"
+                  (click)="deleteInvoiceRow(i, row)"
                   mat-button
                   [disabled]="
                     this.invoiceForm.get('amountRows')?.value.length === 1

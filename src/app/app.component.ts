@@ -78,9 +78,9 @@ export class AppComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    document.documentElement.setAttribute('theme', 'light');
     this.invoiceForm.get('id')?.patchValue(new Date().getTime().toString());
     this.CurrencySymbolEnumKeys = Object.keys(this.CurrencySymbolEnum);
-    document.documentElement.setAttribute('theme', 'light');
   }
 
   get lightTheme(): boolean {
@@ -116,8 +116,9 @@ export class AppComponent implements OnInit {
     this.invoiceAmountRows.push(newInvoiceRow);
   }
 
-  deleteInvoiceRow(i: number) {
+  deleteInvoiceRow(i: number, row: AbstractControl) {
     this.invoiceAmountRows.removeAt(i);
+    this.calculateSummaryAmount();
   }
 
   get invoiceAmountRows() {
@@ -137,6 +138,12 @@ export class AppComponent implements OnInit {
       this.updateVatAmount(row);
     }
 
+    this.calculateSummaryAmount();
+
+    // console.log('invoiceForm', this.invoiceForm.get('amountRows')?.value);
+  }
+
+  calculateSummaryAmount() {
     this.netAmountSum = this.invoiceAmountRows.controls
       .map((item) => item.get('netAmount')?.value)
       .reduce((acc, item) => acc + Number(item), 0);
@@ -146,8 +153,6 @@ export class AppComponent implements OnInit {
     this.grossAmountSum = this.invoiceAmountRows.controls
       .map((item) => item.get('grossAmount')?.value)
       .reduce((acc, item) => acc + Number(item), 0);
-
-    // console.log('invoiceForm', this.invoiceForm.get('amountRows')?.value);
   }
 
   updateVatRateOrNetAmount(row: AbstractControl) {
