@@ -68,3 +68,8 @@ button {
 .fullwidth {
   width: 100%;
 }
+
+textarea:focus,
+input:focus {
+  outline: 2px;
+}

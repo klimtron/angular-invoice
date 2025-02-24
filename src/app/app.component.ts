@@ -13,6 +13,7 @@ import {
   NIP_EXAMPLE,
 } from './shared/models';
 import { decimalValidator, nipNumberValidator } from './shared/validators';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,9 @@ import { decimalValidator, nipNumberValidator } from './shared/validators';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  constructor(liveAnnouncer: LiveAnnouncer) {
+    liveAnnouncer.announce('Witaj w aplikacji do wypełniania faktur'); //WCAG LiveAnnouncer is used to announce messages for screen-reader users using an aria-live region.
+  }
   formId: string = '';
   netAmountSum: number = 0;
   vatAmountSum: number = 0;
@@ -46,20 +50,17 @@ export class AppComponent implements OnInit {
           { value: '', disabled: false },
           Validators.required
         ),
-        netAmount: new FormControl(
-          { value: '', disabled: true },
-          Validators.required
-          // decimalValidator() <<--------- chce tu dac ten validator!!!
+        netAmount: new FormControl<string | null>(
+          { value: null, disabled: true },
+          [Validators.required, decimalValidator()]
         ),
-        vatAmount: new FormControl(
-          { value: '', disabled: true },
-          Validators.required
-          // decimalValidator() <<--------- chce tu dac ten validator!!!
+        vatAmount: new FormControl<string | null>(
+          { value: null, disabled: true },
+          [Validators.required, decimalValidator()]
         ),
-        grossAmount: new FormControl(
-          { value: '', disabled: true },
-          Validators.required
-          // decimalValidator() <<--------- chce tu dac ten validator!!!
+        grossAmount: new FormControl<string | null>(
+          { value: null, disabled: true },
+          [Validators.required, decimalValidator()]
         ),
       }),
     ]),
@@ -81,6 +82,25 @@ export class AppComponent implements OnInit {
     document.documentElement.setAttribute('theme', 'light');
     this.invoiceForm.get('id')?.patchValue(new Date().getTime().toString());
     this.CurrencySymbolEnumKeys = Object.keys(this.CurrencySymbolEnum);
+
+    this.invoiceAmountRows.controls.forEach((row) => {
+      row.get('netAmount')?.addValidators(decimalValidator());
+      row.get('vatAmount')?.addValidators(decimalValidator());
+      row.get('grossAmount')?.addValidators(decimalValidator());
+    });
+  }
+
+  loadState() {
+    const FORM_VALUE: string = JSON.parse(
+      localStorage.getItem('form-data') || '{}'
+    );
+
+    if (FORM_VALUE) {
+      this.invoiceForm.patchValue(JSON.parse(JSON.stringify(FORM_VALUE)));
+      this.invoiceAmountRows.controls.forEach((row, i) => {
+        if (row.valid) this.enableRowAmounts(row);
+      });
+    }
   }
 
   get lightTheme(): boolean {
@@ -94,6 +114,7 @@ export class AppComponent implements OnInit {
       document.documentElement.setAttribute('theme', 'light');
     }
   }
+
   addInvoiceRow() {
     const newInvoiceRow = new FormGroup({
       vatRate: new FormControl(
@@ -139,8 +160,6 @@ export class AppComponent implements OnInit {
     }
 
     this.calculateSummaryAmount();
-
-    console.log('invoiceForm', this.invoiceForm);
   }
 
   calculateSummaryAmount() {
@@ -257,11 +276,13 @@ export class AppComponent implements OnInit {
     return false;
   }
 
-  deleteForm() {
+  resetForm() {
+    this.invoiceForm.reset(this.invoiceForm);
     this.invoiceForm.markAsPristine();
     this.invoiceForm.markAsUntouched();
-    this.invoiceForm.reset(this.invoiceForm.value);
   }
 
-  saveForm() {}
+  saveForm() {
+    localStorage.setItem('form-data', JSON.stringify(this.invoiceForm.value));
+  }
 }

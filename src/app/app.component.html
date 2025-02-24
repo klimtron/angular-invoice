@@ -6,6 +6,7 @@
         color="primary"
         [checked]="lightTheme"
         (change)="toggleTheme()"
+        aria-label="Zmień tryb z jasnego na ciemny"
       ></mat-slide-toggle>
       Tryb Jasny
     </div>
@@ -44,6 +45,7 @@
               formControlName="currency"
               name="currency"
               required
+              aria-label="Input Waluta"
             >
               <mat-option
                 *ngFor="let options of CurrencySymbolEnumKeys"
@@ -80,6 +82,7 @@
                     (selectionChange)="
                       onRowChanges(RowFieldTypes.VAT_RATE, row)
                     "
+                    aria-label="Lista stawka VAT"
                   >
                     <mat-option
                       *ngFor="let options of VAT_RATES"
@@ -100,12 +103,16 @@
                     matInput
                     formControlName="netAmount"
                     (input)="onRowChanges(RowFieldTypes.NET_AMOUNT, row)"
+                    aria-label="Kwota netto"
                   />
 
                   <mat-error
                     *ngIf="row.get('netAmount')?.errors?.['required'] && (row.get('netAmount')?.dirty || row.get('netAmount')?.touched)"
                   >
                     Netto wymagane
+                  </mat-error>
+                  <mat-error *ngIf="row.get('netAmount')?.status === 'INVALID'">
+                    Wpisz poprawną wartość
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -117,9 +124,13 @@
                     matInput
                     formControlName="vatAmount"
                     (input)="onRowChanges(RowFieldTypes.VAT_AMOUNT, row)"
+                    aria-label="Kwota VAT"
                   />
                   <mat-error *ngIf="row.get('vatAmount')?.errors?.['required']">
                     Vat wymagane
+                  </mat-error>
+                  <mat-error *ngIf="row.get('vatAmount')?.status === 'INVALID'">
+                    Wpisz poprawną wartość
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -131,11 +142,17 @@
                     matInput
                     formControlName="grossAmount"
                     (input)="onRowChanges(RowFieldTypes.GROSS_AMOUNT, row)"
+                    aria-label="Kwota Brutto"
                   />
                   <mat-error
                     *ngIf="row.get('grossAmount')?.errors?.['required']"
                   >
                     Brutto wymagane
+                  </mat-error>
+                  <mat-error
+                    *ngIf="row.get('grossAmount')?.status === 'INVALID'"
+                  >
+                    Wpisz poprawną wartość
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -172,15 +189,23 @@
         <div class="summary-wrap">
           <div class="grid-container">
             <span class="grid-item">Razem:</span>
-            <span class="grid-item text-align-right">{{ netAmountSum }}</span>
-            <span class="grid-item text-align-right">{{ vatAmountSum }}</span>
-            <span class="grid-item text-align-right">{{ grossAmountSum }}</span>
+            <span class="grid-item text-align-right" aria-label="Suma netto">{{
+              netAmountSum
+            }}</span>
+            <span class="grid-item text-align-right" aria-label="Suma VAT">{{
+              vatAmountSum
+            }}</span>
+            <span class="grid-item text-align-right" aria-label="Suma brutto">{{
+              grossAmountSum
+            }}</span>
           </div>
           <div class="grid-container total">
             <span class="grid-item">Razem do zapłaty:</span>
             <span class="grid-item"></span>
             <span class="grid-item"></span>
-            <span class="text-align-right">{{ grossAmountSum }}</span>
+            <span class="text-align-right" aria-label="Razem do zapłaty">{{
+              grossAmountSum
+            }}</span>
           </div>
           <mat-error *ngIf="validateTotalGrossAmount()">
             Łączna kwota pozycji brutto została przekroczona
@@ -196,6 +221,7 @@
           placeholder="Data Wystawienia"
           formControlName="invoiceIssueDate"
           required
+          aria-label="Data Wystawienia"
         />
         <mat-datepicker-toggle
           matSuffix
@@ -219,6 +245,7 @@
           placeholder="Data dostarczenia"
           formControlName="invoiceDeliveryDate"
           required
+          aria-label="Data dostarczenia"
         />
         <mat-datepicker-toggle
           matSuffix
@@ -241,6 +268,7 @@
           placeholder="Data Wystawienia"
           formControlName="invoicePaymentDate"
           required
+          aria-label="Termin płatności"
         />
         <mat-datepicker-toggle
           matSuffix
@@ -256,12 +284,22 @@
 
       <div>
         <button
+          mat-raised-button
           type="button"
-          aria-label="Usuń Formularz"
-          (click)="deleteForm()"
+          label="załaduj zapisany stan"
+          aria-label="załaduj zapisany stan"
+          (click)="loadState()"
+          [disabled]="validateTotalGrossAmount()"
+        >
+          Załaduj zapisany stan
+        </button>
+        <button
+          type="button"
+          aria-label="Wyczyść Formularz"
+          (click)="resetForm()"
           mat-raised-button
         >
-          Usuń
+          Wyczyść
         </button>
 
         <button
@@ -269,22 +307,23 @@
           aria-label="Zapisz formularz"
           (click)="saveForm()"
           mat-raised-button
-          [disabled]="
-            validateTotalGrossAmount() && this.invoiceForm?.status === 'INVALID'
-          "
+          [disabled]="validateTotalGrossAmount()"
         >
-          Zapisz
+          Zapisz Stan
         </button>
         <button
           type="submit"
           aria-label="Zapisz i wyślij formularz do zatwierdzenia"
-          [disabled]="this.invoiceForm?.status === 'INVALID'"
+          [disabled]="
+            validateTotalGrossAmount() || this.invoiceForm?.status === 'INVALID'
+          "
           mat-raised-button
         >
           Zapisz i wyślij do zatwierdzenia
         </button>
       </div>
     </form>
-    <pre>{{ invoiceForm.value | json }}</pre>
+    <!-- debug purpose -->
+    <!-- <pre>{{ invoiceForm.value | json }}</pre> -->
   </mat-card>
 </div>
