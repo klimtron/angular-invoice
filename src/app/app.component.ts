@@ -52,15 +52,17 @@ export class AppComponent implements OnInit {
         ),
         netAmount: new FormControl<string | null>(
           { value: null, disabled: true },
-          [Validators.required, Validators.pattern(MATCH_DIGITS_AND_DECIMAL)]
+          [Validators.required]
         ),
         vatAmount: new FormControl<string | null>(
           { value: null, disabled: true },
-          [Validators.required, Validators.pattern(MATCH_DIGITS_AND_DECIMAL)]
+          [Validators.required]
         ),
         grossAmount: new FormControl<string | null>(
           { value: null, disabled: true },
-          [Validators.required, Validators.pattern(MATCH_DIGITS_AND_DECIMAL)]
+          [Validators.required]
+          // [Validators.required, Validators.pattern(MATCH_DIGITS_AND_DECIMAL)]
+          // [Validators.required, amountsValidator()]
         ),
       }),
     ]),

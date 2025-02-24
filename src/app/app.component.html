@@ -205,7 +205,7 @@
             <span class="grid-item"></span>
             <span class="grid-item"></span>
             <span class="text-align-right" aria-label="Razem do zapłaty">{{
-              grossAmountSum
+              grossAmountSum | number : "1.2-2"
             }}</span>
           </div>
           <mat-error *ngIf="validateTotalGrossAmount()">
