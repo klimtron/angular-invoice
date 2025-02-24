@@ -22,14 +22,14 @@
   border-right: 2px solid lightgrey;
 }
 
-.gridContainer {
+.grid-container {
   width: 100%;
   display: grid;
   grid-template-columns: [col] 20% [col] 15% [col] 15% [col] 15% [col] 5%;
   grid-column-gap: 2px;
   justify-content: space-between;
   align-items: center;
-  &.twoCols {
+  &.two-cols {
     grid-template-columns: [col] 48% [col] 48%;
   }
 
@@ -57,7 +57,7 @@
   text-align: right;
 }
 
-.summaryWrap {
+.summary-wrap {
   padding-left: 20px;
 }
 

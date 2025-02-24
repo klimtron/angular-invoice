@@ -10,9 +10,9 @@
   </div>
   <h2>Faktura Kontraktowca</h2>
   <mat-card>
-    <div [formGroup]="invoiceForm">
-      <div class="gridContainer twoCols">
-        <div class="gridItem">
+    <form [formGroup]="invoiceForm">
+      <div class="grid-container two-cols">
+        <div class="grid-item">
           <mat-form-field class="fullwidth">
             <mat-label>NIP</mat-label>
             <input
@@ -35,7 +35,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="gridItem">
+        <div class="grid-item">
           <mat-form-field class="fullwidth"
             ><mat-select
               placeholder="Waluta"
@@ -68,8 +68,8 @@
                 : 'rowError'
             "
           >
-            <div class="gridContainer">
-              <div class="gridItem">
+            <div class="grid-container">
+              <div class="grid-item">
                 <mat-form-field appearance="outline">
                   <mat-select
                     placeholder="Stawka VAT"
@@ -90,7 +90,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="gridItem">
+              <div class="grid-item">
                 <mat-form-field>
                   <mat-label>Kwota netto</mat-label>
                   <input
@@ -106,7 +106,7 @@
                   Kwota netto wymagana
                 </mat-error>
               </div>
-              <div class="gridItem">
+              <div class="grid-item">
                 <mat-form-field>
                   <mat-label>Kwota VAT</mat-label>
                   <input
@@ -120,7 +120,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="gridItem">
+              <div class="grid-item">
                 <mat-form-field>
                   <mat-label>Kwota Brutto</mat-label>
                   <input
@@ -136,8 +136,9 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="gridItem">
+              <div class="grid-item">
                 <button
+                  type="button"
                   class="delete-btn"
                   aria-label="Usuń wiersz formularza"
                   (click)="deleteInvoiceRow(i)"
@@ -156,6 +157,7 @@
           </div>
         </div>
         <button
+          type="button"
           class="button"
           (click)="addInvoiceRow()"
           [disabled]="this.invoiceForm.get('amountRows')?.status === 'INVALID'"
@@ -164,17 +166,17 @@
         >
           Dodaj wiersz
         </button>
-        <div class="summaryWrap">
-          <div class="gridContainer">
-            <span class="gridItem">Razem:</span>
-            <span class="gridItem text-align-right">{{ netAmountSum }}</span>
-            <span class="gridItem text-align-right">{{ vatAmountSum }}</span>
-            <span class="gridItem text-align-right">{{ grossAmountSum }}</span>
+        <div class="summary-wrap">
+          <div class="grid-container">
+            <span class="grid-item">Razem:</span>
+            <span class="grid-item text-align-right">{{ netAmountSum }}</span>
+            <span class="grid-item text-align-right">{{ vatAmountSum }}</span>
+            <span class="grid-item text-align-right">{{ grossAmountSum }}</span>
           </div>
-          <div class="gridContainer total">
-            <span class="gridItem">Razem do zapłaty:</span>
-            <span class="gridItem"></span>
-            <span class="gridItem"></span>
+          <div class="grid-container total">
+            <span class="grid-item">Razem do zapłaty:</span>
+            <span class="grid-item"></span>
+            <span class="grid-item"></span>
             <span class="text-align-right">{{ grossAmountSum }}</span>
           </div>
           <mat-error *ngIf="validateTotalGrossAmount()">
@@ -269,7 +271,7 @@
           Zapisz
         </button>
         <button
-          type="button"
+          type="submit"
           aria-label="Zapisz i wyślij formularz do zatwierdzenia"
           disabled
           mat-raised-button
@@ -277,7 +279,7 @@
           Zapisz i wyślij do zatwierdzenia
         </button>
       </div>
-    </div>
+    </form>
     <pre>{{ invoiceForm.value | json }}</pre>
   </mat-card>
 </div>

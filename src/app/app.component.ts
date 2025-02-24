@@ -254,7 +254,7 @@ export class AppComponent implements OnInit {
   deleteForm() {
     this.invoiceForm.markAsPristine();
     this.invoiceForm.markAsUntouched();
-    // this.invoiceForm.reset(this.invoiceForm.value);
+    this.invoiceForm.reset(this.invoiceForm.value);
   }
 
   saveForm() {}
