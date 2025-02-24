@@ -210,18 +210,18 @@
         <mat-label>Data dostarczenia</mat-label>
         <input
           matInput
-          [matDatepicker]="invoiceDeliverDatePicker"
+          [matDatepicker]="invoiceDeliveryDatePicker"
           placeholder="Data dostarczenia"
-          formControlName="invoiceDeliverDate"
+          formControlName="invoiceDeliveryDate"
           required
         />
         <mat-datepicker-toggle
           matSuffix
-          [for]="invoiceDeliverDatePicker"
+          [for]="invoiceDeliveryDatePicker"
         ></mat-datepicker-toggle>
-        <mat-datepicker #invoiceDeliverDatePicker></mat-datepicker>
+        <mat-datepicker #invoiceDeliveryDatePicker></mat-datepicker>
         <mat-error
-          *ngIf="this.invoiceForm.get('invoiceDeliverDate')?.errors?.['required']"
+          *ngIf="this.invoiceForm.get('invoiceDeliveryDate')?.errors?.['required']"
         >
           Data dostarczenia wymagane
         </mat-error>

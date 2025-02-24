@@ -6,8 +6,13 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { VAT_RATES, CurrencySymbolEnum, RowFieldTypes } from './shared/models';
-import { nipNumberValidator } from './shared/validators';
+import {
+  VAT_RATES,
+  CurrencySymbolEnum,
+  RowFieldTypes,
+  NIP_EXAMPLE,
+} from './shared/models';
+import { decimalValidator, nipNumberValidator } from './shared/validators';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +32,7 @@ export class AppComponent implements OnInit {
 
   invoiceForm: FormGroup = new FormGroup({
     id: new FormControl<string | null>(''),
-    nipNumber: new FormControl<string | null>('1181784140', [
+    nipNumber: new FormControl<string | null>(NIP_EXAMPLE, [
       Validators.required,
       nipNumberValidator(),
     ]),
@@ -44,14 +49,17 @@ export class AppComponent implements OnInit {
         netAmount: new FormControl(
           { value: '', disabled: true },
           Validators.required
+          // decimalValidator() <<--------- chce tu dac ten validator!!!
         ),
         vatAmount: new FormControl(
           { value: '', disabled: true },
           Validators.required
+          // decimalValidator() <<--------- chce tu dac ten validator!!!
         ),
         grossAmount: new FormControl(
           { value: '', disabled: true },
           Validators.required
+          // decimalValidator() <<--------- chce tu dac ten validator!!!
         ),
       }),
     ]),
@@ -59,7 +67,7 @@ export class AppComponent implements OnInit {
       { value: '', disabled: false },
       Validators.required
     ),
-    invoiceDeliverDate: new FormControl(
+    invoiceDeliveryDate: new FormControl(
       { value: '', disabled: false },
       Validators.required
     ),
@@ -77,7 +85,7 @@ export class AppComponent implements OnInit {
   get lightTheme(): boolean {
     return document.documentElement.getAttribute('theme') === 'light';
   }
-  
+
   toggleTheme() {
     if (this.lightTheme) {
       document.documentElement.setAttribute('theme', null!);
