@@ -114,7 +114,9 @@
                   >
                     Netto wymagane
                   </mat-error>
-                  <mat-error *ngIf="row.get('netAmount')?.hasError('pattern')">
+                  <mat-error
+                    *ngIf="row.get('netAmount')?.invalid && !row.get('netAmount')?.errors?.['required']"
+                  >
                     Wpisz poprawną wartość
                   </mat-error>
                 </mat-form-field>
@@ -136,7 +138,9 @@
                   >
                     Vat wymagane
                   </mat-error>
-                  <mat-error *ngIf="row.get('vatAmount')?.hasError('pattern')">
+                  <mat-error
+                    *ngIf="row.get('vatAmount')?.invalid && !row.get('vatAmount')?.errors?.['required']"
+                  >
                     Wpisz poprawną wartość
                   </mat-error>
                 </mat-form-field>
@@ -159,7 +163,7 @@
                     Brutto wymagane
                   </mat-error>
                   <mat-error
-                    *ngIf="row.get('grossAmount')?.hasError('pattern')"
+                    *ngIf="row.get('grossAmount')?.invalid && !row.get('netAmount')?.errors?.['required']"
                   >
                     Wpisz poprawną wartość
                   </mat-error>
