@@ -1,5 +1,4 @@
 ﻿import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { MATCH_NON_DIGITS, MATCH_DIGITS_AND_DECIMAL } from './models';
 
 export function nipNumberValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

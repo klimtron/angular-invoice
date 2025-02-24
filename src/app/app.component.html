@@ -102,9 +102,6 @@
                     class="text-align-right"
                     matInput
                     formControlName="netAmount"
-                    [value]="
-                      row.get('netAmount')?.value | removeNonDigitsAndDecimal
-                    "
                     (input)="
                       onRowChanges(RowFieldTypes.NET_AMOUNT, row, $event)
                     "

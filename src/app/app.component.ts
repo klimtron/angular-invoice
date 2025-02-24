@@ -11,19 +11,17 @@ import {
   CurrencySymbolEnum,
   RowFieldTypes,
   NIP_EXAMPLE,
-  MATCH_NON_DIGITS,
-  MATCH_DIGITS_AND_DECIMAL,
 } from './shared/models';
 import { nipNumberValidator } from './shared/validators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-
+import { ReplacePipe } from './shared/replace-pipe';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(liveAnnouncer: LiveAnnouncer) {
+  constructor(liveAnnouncer: LiveAnnouncer, private replacePipe: ReplacePipe) {
     liveAnnouncer.announce('Witaj w aplikacji do wypełniania faktur'); //WCAG LiveAnnouncer is used to announce messages for screen-reader users using an aria-live region.
   }
   netAmountSum: number = 0;
@@ -63,8 +61,6 @@ export class AppComponent implements OnInit {
         grossAmount: new FormControl<string | null>(
           { value: null, disabled: true },
           [Validators.required]
-          // [Validators.required, Validators.pattern(MATCH_DIGITS_AND_DECIMAL)]
-          // [Validators.required, amountsValidator()]
         ),
       }),
     ]),
@@ -132,10 +128,7 @@ export class AppComponent implements OnInit {
   }
 
   onRowChanges(fieldType: RowFieldTypes, row: AbstractControl, $event?: Event) {
-    // let val = $event ? ($event.target as HTMLInputElement).value : '';
-    // val = val.replace(MATCH_DIGITS_AND_DECIMAL, 'xxx');
-    // this.netInput.nativeElement.value = val;
-    // this.phoneNumber = val;
+    this.replaceNonNumberValues(row);
 
     if (fieldType === RowFieldTypes.VAT_RATE) {
       this.enableRowAmounts(row);
@@ -150,6 +143,20 @@ export class AppComponent implements OnInit {
     }
 
     this.calculateSummaryAmount();
+  }
+
+  replaceNonNumberValues(row: AbstractControl) {
+    row
+      .get('netAmount')
+      ?.patchValue(this.replacePipe.transform(row.get('netAmount')?.value));
+
+    row
+      .get('vatAmount')
+      ?.patchValue(this.replacePipe.transform(row.get('vatAmount')?.value));
+
+    row
+      .get('grossAmount')
+      ?.patchValue(this.replacePipe.transform(row.get('grossAmount')?.value));
   }
 
   calculateSummaryAmount() {

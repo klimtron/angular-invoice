@@ -32,6 +32,7 @@ import { ReplacePipe } from './shared/replace-pipe';
   ],
   exports: [ReplacePipe],
   providers: [
+    ReplacePipe,
     MatDatepickerModule,
     {
       provide: MAT_DATE_LOCALE,
