@@ -116,7 +116,7 @@ export class AppComponent implements OnInit {
     this.invoiceAmountRows.push(newInvoiceRow);
   }
 
-  deleteInvoiceRow(i: number, row: AbstractControl) {
+  deleteInvoiceRow(i: number) {
     this.invoiceAmountRows.removeAt(i);
     this.calculateSummaryAmount();
   }
@@ -140,7 +140,7 @@ export class AppComponent implements OnInit {
 
     this.calculateSummaryAmount();
 
-    // console.log('invoiceForm', this.invoiceForm.get('amountRows')?.value);
+    console.log('invoiceForm', this.invoiceForm);
   }
 
   calculateSummaryAmount() {

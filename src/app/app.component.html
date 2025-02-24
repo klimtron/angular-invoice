@@ -101,12 +101,13 @@
                     formControlName="netAmount"
                     (input)="onRowChanges(RowFieldTypes.NET_AMOUNT, row)"
                   />
+
+                  <mat-error
+                    *ngIf="row.get('netAmount')?.errors?.['required'] && (row.get('netAmount')?.dirty || row.get('netAmount')?.touched)"
+                  >
+                    Netto wymagane
+                  </mat-error>
                 </mat-form-field>
-                <mat-error
-                  *ngIf="row.get('netAmount')?.errors?.['required'] && (row.get('netAmount')?.dirty || row.get('netAmount')?.touched)"
-                >
-                  Kwota netto wymagana
-                </mat-error>
               </div>
               <div class="grid-item">
                 <mat-form-field>
@@ -118,7 +119,7 @@
                     (input)="onRowChanges(RowFieldTypes.VAT_AMOUNT, row)"
                   />
                   <mat-error *ngIf="row.get('vatAmount')?.errors?.['required']">
-                    Kwota Vat wymagane
+                    Vat wymagane
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -134,7 +135,7 @@
                   <mat-error
                     *ngIf="row.get('grossAmount')?.errors?.['required']"
                   >
-                    Kwota Brutto wymagane
+                    Brutto wymagane
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -143,7 +144,7 @@
                   type="button"
                   class="delete-btn"
                   aria-label="Usuń wiersz formularza"
-                  (click)="deleteInvoiceRow(i, row)"
+                  (click)="deleteInvoiceRow(i)"
                   mat-button
                   [disabled]="
                     this.invoiceForm.get('amountRows')?.value.length === 1
@@ -268,14 +269,16 @@
           aria-label="Zapisz formularz"
           (click)="saveForm()"
           mat-raised-button
-          [disabled]="validateTotalGrossAmount()"
+          [disabled]="
+            validateTotalGrossAmount() && this.invoiceForm?.status === 'INVALID'
+          "
         >
           Zapisz
         </button>
         <button
           type="submit"
           aria-label="Zapisz i wyślij formularz do zatwierdzenia"
-          disabled
+          [disabled]="this.invoiceForm?.status === 'INVALID'"
           mat-raised-button
         >
           Zapisz i wyślij do zatwierdzenia
