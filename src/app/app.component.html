@@ -102,8 +102,14 @@
                     class="text-align-right"
                     matInput
                     formControlName="netAmount"
-                    (input)="onRowChanges(RowFieldTypes.NET_AMOUNT, row)"
+                    [value]="
+                      row.get('netAmount')?.value | removeNonDigitsAndDecimal
+                    "
+                    (input)="
+                      onRowChanges(RowFieldTypes.NET_AMOUNT, row, $event)
+                    "
                     aria-label="Kwota netto"
+                    #netInput
                   />
 
                   <mat-error
@@ -123,7 +129,9 @@
                     class="text-align-right"
                     matInput
                     formControlName="vatAmount"
-                    (input)="onRowChanges(RowFieldTypes.VAT_AMOUNT, row)"
+                    (input)="
+                      onRowChanges(RowFieldTypes.VAT_AMOUNT, row, $event)
+                    "
                     aria-label="Kwota VAT"
                   />
                   <mat-error
@@ -143,7 +151,9 @@
                     class="text-align-right"
                     matInput
                     formControlName="grossAmount"
-                    (input)="onRowChanges(RowFieldTypes.GROSS_AMOUNT, row)"
+                    (input)="
+                      onRowChanges(RowFieldTypes.GROSS_AMOUNT, row, $event)
+                    "
                     aria-label="Kwota Brutto"
                   />
                   <mat-error

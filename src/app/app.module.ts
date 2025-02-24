@@ -13,9 +13,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
-
+import { ReplacePipe } from './shared/replace-pipe';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ReplacePipe],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -30,6 +30,7 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
     MatIconModule,
     MatSlideToggleModule,
   ],
+  exports: [ReplacePipe],
   providers: [
     MatDatepickerModule,
     {

@@ -50,6 +50,6 @@ export const VAT_RATES: Option[] = [
 export const MATCH_NON_DIGITS = /[^0-9]+/g;
 export const MATCH_SPACES = /\s/g;
 export const MATCH_DIGITS = /[0-9]/g;
-export const MATCH_DIGITS_AND_DECIMAL = /^[1-9]\d*(\.\d+)?$/gi;
+export const MATCH_DIGITS_AND_DECIMAL = /^[1-9]\d*(\.\d+)?$/g;
 
 export const NIP_EXAMPLE = '1181784140';

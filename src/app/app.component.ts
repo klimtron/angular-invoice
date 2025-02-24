@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   FormGroup,
   FormArray,
@@ -33,6 +33,8 @@ export class AppComponent implements OnInit {
   CurrencySymbolEnum = CurrencySymbolEnum;
   CurrencySymbolEnumKeys: string[] = [];
   VAT_RATES = VAT_RATES;
+
+  @ViewChild('netInput') netInput!: ElementRef<HTMLInputElement>;
 
   invoiceForm: FormGroup = new FormGroup({
     id: new FormControl<string | null>(''),
@@ -129,7 +131,12 @@ export class AppComponent implements OnInit {
     return this.invoiceForm.get('amountRows') as FormArray;
   }
 
-  onRowChanges(fieldType: RowFieldTypes, row: AbstractControl) {
+  onRowChanges(fieldType: RowFieldTypes, row: AbstractControl, $event?: Event) {
+    // let val = $event ? ($event.target as HTMLInputElement).value : '';
+    // val = val.replace(MATCH_DIGITS_AND_DECIMAL, 'xxx');
+    // this.netInput.nativeElement.value = val;
+    // this.phoneNumber = val;
+
     if (fieldType === RowFieldTypes.VAT_RATE) {
       this.enableRowAmounts(row);
       this.updateVatRateOrNetAmount(row);
