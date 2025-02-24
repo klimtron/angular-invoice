@@ -127,7 +127,7 @@ export class AppComponent implements OnInit {
     return this.invoiceForm.get('amountRows') as FormArray;
   }
 
-  onRowChanges(fieldType: RowFieldTypes, row: AbstractControl, $event?: Event) {
+  onRowChanges(fieldType: RowFieldTypes, row: AbstractControl) {
     this.replaceNonNumberValues(row);
 
     if (fieldType === RowFieldTypes.VAT_RATE) {
@@ -291,9 +291,16 @@ export class AppComponent implements OnInit {
     this.invoiceForm.markAsPristine();
     this.invoiceForm.markAsUntouched();
     this.calculateSummaryAmount();
+    this.clearFormArray(this.invoiceAmountRows);
   }
 
   saveForm() {
     localStorage.setItem('form-data', JSON.stringify(this.invoiceForm.value));
   }
+
+  clearFormArray = (formArray: FormArray) => {
+    while (formArray.length !== 1) {
+      formArray.removeAt(1);
+    }
+  };
 }
